@@ -23,10 +23,10 @@ function Contacto() {
     setLoading(true);
 
     emailjs.sendForm(
-      'service_ad4bc06',   // <--- REEMPLAZA ESTO
-      'template_fwnnm6q',  // <--- REEMPLAZA ESTO
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       form.current,
-      'gLZ5X1b8qp0g508bi'    // <--- REEMPLAZA ESTO
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
     .then(() => {
       setStatus({ 
