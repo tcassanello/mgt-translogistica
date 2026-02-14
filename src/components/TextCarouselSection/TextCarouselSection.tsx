@@ -5,12 +5,11 @@ import {
   Typography,
   Container,
   IconButton,
-  Button,
   Stack,
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link } from "react-router-dom";
+import { useImagePreload } from "../../hooks/useImagePreload";
 
 const carouselImages = [
   "/hom8.jpeg",
@@ -19,11 +18,15 @@ const carouselImages = [
   "/home7.jpeg",
   "/home5.jpeg",
   "/home4.jpeg",
-  "/home2.webp",];
+  "/home2.webp",
+];
 
 function TextCarouselSection() {
   const [activeStep, setActiveStep] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Precargar todas las imágenes del carrusel
+  useImagePreload(carouselImages, { sequential: true });
 
   // Función para reiniciar el timer
   const resetTimer = () => {
@@ -90,7 +93,7 @@ function TextCarouselSection() {
                   lineHeight: 1.1,
                 }}
               >
-                Logística Inteligente para Desafíos Reales
+                Gestión integral de Logística y Transporte
               </Typography>
               <Typography
                 variant="body1"
@@ -101,10 +104,11 @@ function TextCarouselSection() {
                   mb: 5,
                 }}
               >
-                En **MGT Translogística**, transformamos la complejidad de la
-                cadena de suministro en una ventaja competitiva para su negocio.
-                Con base en Buenos Aires y cobertura nacional, conectamos sus
-                productos con el destino final con seguridad y precisión.
+                Coordinamos y ejecutamos operaciones de transporte y
+                distribución con enfoque en la puntualidad, la seguridad y la
+                eficiencia operativa. Brindamos soporte a empresas industriales
+                y operaciones de comercio exterior, asegurando que cada carga
+                llegue a destino en tiempo y forma.
               </Typography>
             </Box>
           </Grid>
