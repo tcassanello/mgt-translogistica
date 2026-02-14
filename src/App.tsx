@@ -4,7 +4,7 @@ import Servicios from "./components/pages/Servicios";
 import Empresa from "./components/pages/Empresa";
 import Contacto from "./components/pages/Contacto";
 import ScrollToTop from "./components/ScrolltoTop";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   return (
