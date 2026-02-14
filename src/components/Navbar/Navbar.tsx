@@ -28,7 +28,7 @@ function Navbar() {
           disableGutters
           sx={{
             justifyContent: isHome ? "center" : "space-between",
-            height: isHome ? 90 : 70, // Un poco más compacto en páginas internas
+            height: { xs: 60, md: isHome ? 90 : 70 }, // Más compacto en móviles
           }}
         >
           {/* Logo Brand */}
@@ -46,7 +46,7 @@ function Navbar() {
               src="/logo.png"
               alt="MGT"
               sx={{
-                height: isHome ? 48 : 58, // El logo también se achica un poco fuera del Home
+                height: { xs: 40, md: isHome ? 48 : 58 }, // Más pequeño en móviles
                 width: "auto",
                 transition: "all 0.3s",
               }}
@@ -57,7 +57,7 @@ function Navbar() {
           <Box
             component="ul"
             sx={{
-              display: "flex",
+              display: { xs: "none", md: "flex" }, // Ocultar en móviles
               listStyle: "none",
               gap: 3.5,
               margin: 0,
