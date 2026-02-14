@@ -57,9 +57,9 @@ function Navbar() {
           <Box
             component="ul"
             sx={{
-              display: { xs: "none", md: "flex" }, // Ocultar en móviles
+              display: "flex",
               listStyle: "none",
-              gap: 3.5,
+              gap: { xs: 1.5, md: 3.5 }, // Gap más pequeño en móviles
               margin: 0,
               padding: 0,
             }}
@@ -76,7 +76,7 @@ function Navbar() {
                   sx={{
                     color: "white",
                     textDecoration: "none",
-                    fontSize: "0.85rem",
+                    fontSize: { xs: "0.65rem", md: "0.85rem" }, // Más pequeño en móviles
                     fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
