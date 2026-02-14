@@ -4,6 +4,7 @@ import Servicios from "./components/pages/Servicios";
 import Empresa from "./components/pages/Empresa";
 import Contacto from "./components/pages/Contacto";
 import ScrollToTop from "./components/ScrolltoTop";
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/nosotros" element={<Empresa />} />
       <Route path="/contacto" element={<Contacto/>} />
     </Routes>
+    <Analytics />
   </>
   );
 }
