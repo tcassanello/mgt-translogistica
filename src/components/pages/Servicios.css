@@ -1,0 +1,25 @@
+.servicios-page {
+  padding: 100px 0;
+  background-color: #f9f9f9;
+}
+
+.servicios__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.servicios__card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid #eee;
+}
+
+.servicios__card h3 {
+  color: #0b3b7a;
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+}

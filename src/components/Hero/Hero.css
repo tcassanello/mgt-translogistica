@@ -1,0 +1,45 @@
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background-color: #222;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4));
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: center;
+  width: 100%; /* El 'container' en el JSX hará el resto */
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.hero__logo {
+  width: 200px; /* <--- Cambia este valor para achicar la imagen */
+  height: auto;
+  margin: 0 auto 0px; /* El segundo valor (18px) controla el espacio con el texto */
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
