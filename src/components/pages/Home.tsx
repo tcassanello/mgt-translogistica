@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import { Button, Box, Typography, Container } from '@mui/material';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import WarehouseIcon from '@mui/icons-material/Warehouse';
 import MainLayout from "../layaouts/MainLayout";
 import Hero from "../Hero/Hero";
 import LogoCarousel from "../LogoCarousel/LogoCarousel";

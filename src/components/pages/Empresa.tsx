@@ -1,5 +1,5 @@
 // src/components/pages/Empresa.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Container, 
   Typography, 
