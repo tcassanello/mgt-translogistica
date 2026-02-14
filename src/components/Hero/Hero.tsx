@@ -16,7 +16,7 @@ function Hero({ backgroundImage, title, subtitle, showLogo = false, actions }: H
       sx={{ 
         position: 'relative', 
         width: '100%', 
-        minHeight: '85vh', // Un poco más alto para que el efecto se note mejor
+        minHeight: { xs: '60vh', md: '85vh' }, // Menor en móviles
         display: 'flex', 
         alignItems: 'center',
         overflow: 'hidden',
