@@ -31,7 +31,7 @@ function Hero({ backgroundImage, title, subtitle, showLogo = false, actions }: H
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed', // <--- ESTO crea el efecto "tapado"
+          backgroundAttachment: { xs: 'scroll', md: 'fixed' }, // Fixed solo en desktop
           zIndex: 0,
           // Overlay oscuro para que el texto resalte
           '&::after': {
