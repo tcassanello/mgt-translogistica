@@ -1,50 +1,62 @@
-import React, { useRef, useState } from 'react';
-import { 
-  Box, Container, Typography, TextField, Button, 
-  Grid, Paper, Snackbar, Alert, CircularProgress 
+import { useState } from 'react';
+import {
+  Box, Container, Typography, TextField, Button,
+  Grid, Paper, Snackbar, Alert, CircularProgress
 } from '@mui/material';
-import emailjs from '@emailjs/browser';
 import MainLayout from '../layaouts/MainLayout';
 import SendIcon from '@mui/icons-material/Send';
 
+const RATE_LIMIT_MS = 60_000;
+
 function Contacto() {
-  const form = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<{ open: boolean, type: 'success' | 'error', msg: string }>({
+  const [status, setStatus] = useState<{ open: boolean; type: 'success' | 'error'; msg: string }>({
     open: false, type: 'success', msg: ''
   });
 
-  const sendEmail = (e: React.FormEvent) => {
+  const sendEmail = async (e: { preventDefault(): void; currentTarget: HTMLFormElement }) => {
     e.preventDefault();
 
-    // Validamos que el formulario exista
-    if (!form.current) return;
+    const lastSent = Number(localStorage.getItem('contact_last_sent') ?? 0);
+    if (Date.now() - lastSent < RATE_LIMIT_MS) {
+      setStatus({ open: true, type: 'error', msg: 'Espera un momento antes de enviar otro mensaje.' });
+      return;
+    }
+
+    const form = e.currentTarget;
+    const data = {
+      user_name:  (form.elements.namedItem('user_name')  as HTMLInputElement).value,
+      user_email: (form.elements.namedItem('user_email') as HTMLInputElement).value,
+      subject:    (form.elements.namedItem('subject')    as HTMLInputElement).value,
+      message:    (form.elements.namedItem('message')    as HTMLTextAreaElement).value,
+    };
 
     setLoading(true);
 
-    emailjs.sendForm(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-      form.current,
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-    )
-    .then(() => {
-      setStatus({ 
-        open: true, 
-        type: 'success', 
-        msg: '¡Mensaje enviado con éxito! Nos contactaremos pronto.' 
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
-      form.current?.reset(); // Limpia el formulario
-    })
-    .catch((error) => {
-      console.error(error);
-      setStatus({ 
-        open: true, 
-        type: 'error', 
-        msg: 'Hubo un error al enviar el mensaje. Intente nuevamente.' 
+
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({ error: 'Error desconocido' }));
+        throw new Error(error);
+      }
+
+      localStorage.setItem('contact_last_sent', String(Date.now()));
+      setStatus({ open: true, type: 'success', msg: '¡Mensaje enviado con éxito! Nos contactaremos pronto.' });
+      form.reset();
+    } catch (error) {
+      setStatus({
+        open: true,
+        type: 'error',
+        msg: error instanceof Error ? error.message : 'Hubo un error al enviar el mensaje. Intente nuevamente.',
       });
-    })
-    .finally(() => setLoading(false));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,31 +71,34 @@ function Contacto() {
               Complete el formulario y nuestro equipo de logística se pondrá en contacto a la brevedad.
             </Typography>
 
-            {/* El atributo 'name' en cada input debe coincidir con las variables de tu template en EmailJS */}
-            <form ref={form} onSubmit={sendEmail}>
+            <form onSubmit={sendEmail}>
               <Grid container spacing={3}>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField 
-                    fullWidth label="Nombre Completo" name="user_name" 
+                  <TextField
+                    fullWidth label="Nombre Completo" name="user_name"
                     required variant="outlined" disabled={loading}
+                    inputProps={{ maxLength: 100 }}
                   />
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <TextField 
-                    fullWidth label="Correo Electrónico" name="user_email" 
+                  <TextField
+                    fullWidth label="Correo Electrónico" name="user_email"
                     type="email" required variant="outlined" disabled={loading}
+                    inputProps={{ maxLength: 200 }}
                   />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField 
-                    fullWidth label="Asunto" name="subject" 
+                  <TextField
+                    fullWidth label="Asunto" name="subject"
                     variant="outlined" disabled={loading}
+                    inputProps={{ maxLength: 200 }}
                   />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <TextField 
-                    fullWidth label="Mensaje" name="message" 
+                  <TextField
+                    fullWidth label="Mensaje" name="message"
                     multiline rows={4} required variant="outlined" disabled={loading}
+                    inputProps={{ maxLength: 2000 }}
                   />
                 </Grid>
                 <Grid size={{ xs: 12 }} sx={{ textAlign: 'center', mt: 2 }}>
@@ -92,9 +107,9 @@ function Contacto() {
                     variant="contained"
                     disabled={loading}
                     startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
-                    sx={{ 
-                      bgcolor: '#0b3b7a', 
-                      px: 6, py: 1.5, 
+                    sx={{
+                      bgcolor: '#0b3b7a',
+                      px: 6, py: 1.5,
                       fontSize: '1.1rem',
                       fontWeight: 700,
                       borderRadius: '8px',
@@ -110,10 +125,9 @@ function Contacto() {
         </Container>
       </Box>
 
-      {/* Alerta de confirmación */}
-      <Snackbar 
-        open={status.open} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={status.open}
+        autoHideDuration={6000}
         onClose={() => setStatus({ ...status, open: false })}
       >
         <Alert severity={status.type} variant="filled" sx={{ width: '100%' }}>
