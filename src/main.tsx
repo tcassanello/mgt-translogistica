@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
@@ -9,28 +9,32 @@ import {
   HOME_CAROUSEL_IMAGES,
 } from "./utils/imagePreload";
 
-// Precargar imágenes críticas en paralelo cuando la app inicia
 preloadImages(CRITICAL_IMAGES).catch((error) => {
   console.warn("Error al precargar imágenes críticas:", error);
 });
 
-// Precargar imágenes del home después de que la página esté lista
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
-    preloadImages(HOME_CAROUSEL_IMAGES).catch(() => {
-      // Silent fail para no afectar la experiencia del usuario
-    });
+    preloadImages(HOME_CAROUSEL_IMAGES).catch(() => {});
   });
 } else {
-  preloadImages(HOME_CAROUSEL_IMAGES).catch(() => {
-    // Silent fail para no afectar la experiencia del usuario
-  });
+  preloadImages(HOME_CAROUSEL_IMAGES).catch(() => {});
 }
 
-createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+
+const app = (
   <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>
 );
+
+// Si el root ya tiene HTML pre-renderizado (react-snap), hidratamos.
+// En desarrollo o sin pre-rendering, montamos normalmente.
+if (rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app);
+} else {
+  createRoot(rootElement).render(app);
+}
