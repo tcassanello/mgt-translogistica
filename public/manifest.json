@@ -1,0 +1,17 @@
+{
+  "name": "MGT Translogistica",
+  "short_name": "MGT",
+  "description": "Servicios de transporte y logística integral en Argentina.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3F3E3A",
+  "theme_color": "#3F3E3A",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
